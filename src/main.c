@@ -32,7 +32,7 @@ int main() {
     int i = 3;
     // Initialize
     List_t *list = nsIODELList.create(num_teardown);
-    list->val_printer = num_printer;
+    list->dumper = num_printer;
     // insert node
     nsIODELList.insert_node_first(list, &c); // 2 in front
     // get node

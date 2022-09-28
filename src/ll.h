@@ -41,8 +41,8 @@ struct _llist {
     size_t size;                // size of the list
     Node_t *head;               // pointer to the first element of the list
     pthread_rwlock_t mtx;       // mutex for thread safety
-    gen_func_t val_teardown;    // a function that is called every time a value is deleted with a pointer to that value
-    gen_func_t val_printer;     // a function that can print the values in a linked list
+    gen_func_t teardown;    // a function that is called every time a value is deleted with a pointer to that value
+    gen_func_t dumper;     // a function that can print the values in a linked list
 };
 // NAMSPACED STRUCT WITH LINKEDLIST HANDLER METHODS
 typedef struct _nsllist nsLList_t;

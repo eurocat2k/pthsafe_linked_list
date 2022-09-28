@@ -3,7 +3,7 @@
 /**
  * @name   create
  * @note   create and initialize linked list
- * @param  gen_func_t val_teardown: generic function to destroy list elements if their have no self destructor functions emmbedded into the list item
+ * @param  gen_func_t teardown: generic function to destroy list elements if their have no self destructor functions emmbedded into the list item
  * @retval 
  */
 List_t* create(gen_func_t teardown) {
@@ -36,7 +36,7 @@ void destroy(List_t *list) {
         if (node->destroy) {
             node->destroy(node->data);
         } else {
-            list->val_teardown(node->data);
+            list->teardown(node->data);
         }
 #ifdef HAVE_LIBPTHREAD
         RWUNLOCK(node->mtx);
@@ -51,8 +51,8 @@ void destroy(List_t *list) {
         (list->size)--;
     }
     list->head = NULL;
-    list->val_teardown = NULL;
-    list->val_printer = NULL;
+    list->teardown = NULL;
+    list->dumper = NULL;
 #ifdef HAVE_LIBPTHREAD
     RWUNLOCK(list->mtx);
     pthread_rwlock_destroy(&(list->mtx));
@@ -193,7 +193,7 @@ int remove_node_index(List_t *list, size_t n) {
     if (tmp->destroy) {
         tmp->destroy(tmp->data);
     } else {
-        list->val_teardown(tmp->data);
+        list->teardown(tmp->data);
     }
     SafeFree(tmp);
     return list->size;
@@ -243,7 +243,7 @@ int remove_node_search(List_t *list, condition_func_t cond) {
     if (node->destroy) {
         node->destroy(node->data);
     } else {
-        list->val_teardown(node->data);
+        list->teardown(node->data);
     }
     SafeFree(node);
 #ifdef HAVE_LIBPTHREAD
@@ -308,10 +308,10 @@ void map(List_t *list, gen_func_t fn) {
  * @retval None
  */
 void dump(List_t list) {
-    if (list.val_printer == NULL)
+    if (list.dumper == NULL)
         return;
     printf("(LIST:\n");
-    map(&list, list.val_printer);
+    map(&list, list.dumper);
     printf("), length: %zu\n", list.size);
 }
 /**
