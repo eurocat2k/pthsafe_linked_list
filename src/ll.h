@@ -3,11 +3,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#ifdef HAVE_LIBPTHREAD
 #include <pthread.h>
+#endif
 #include <stdbool.h>
 
 #include "sf.h"
 
+#ifdef HAVE_LIBPTHREAD
 // for locking and unlocking rwlocks along with `locktype_t`
 #ifndef RWLOCK
 #define RWLOCK(lt, lk) ((lt) == l_read)                   \
@@ -19,6 +22,7 @@
 #define RWUNLOCK(lk) pthread_rwlock_unlock(&(lk));
 #endif // !RWUNLOCK
 // 
+#endif
 
 /* type definitions */
 typedef enum locktype {

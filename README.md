@@ -59,7 +59,7 @@ From now it's quite simpe, you just go into ***src*** subdirectory, then call **
 If you have got **valgrind** tool, then you can check for the memory leaks, and inconsistencies.
 
 ```bash
-(cd src && make) && valgrind -s --tool=drd --trace-rwlock=yes ./src/tsllist_demo
+(cd src && make) && valgrind -s --tool=drd --trace-rwlock=yes ./src/tsllist_demo && (cd src/ && make clean)
 ```
 
 For me - on my machine - the test gives the following result:
