@@ -50,3 +50,19 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+# my stuff
+config.*
+*~
+compile*
+install*
+missing*
+depcomp*
+*.in
+*.in~
+autom4te.cache/
+m4/
+.deps/
+.libs/
+*.log
+stamp-h1
+.gitignore
