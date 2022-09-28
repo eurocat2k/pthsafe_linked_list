@@ -136,4 +136,27 @@ The ***gen_func_t** teardown* function deals with nodes as such - *common type o
 
 But what if the list is intended to be dealing with various types of nodes - either scalars, or other exotic structures even another linked lists?
 
-I added extra **destroy**/***teardown*** function for the node type - the list element type in the linked list -, to be able to handle node data specific cleanup processes.
+I added extra **destroy**/***teardown*** function for the node type - the list element type in the linked list -, to be able to handle node data specific cleanup processes. *see below*:
+
+```C
+    // NODE TYPE
+    typedef struct _node Node_t;
+    struct _node {
+        struct _node *next;
+        void *data;
+        pthread_rwlock_t mtx;       // rw mutex
+        gen_func_t destroy;         // node data specific destructor function
+    };
+```
+
+So, next time if the linked list wrapper attempt to store different type of data in the node list, then later on it can trigger node specific destructor if needed, and of course it is written and attached to the node at creation time.
+
+```C
+    ...
+    if (node->destroy) {
+        node->destroy(node->data);
+    } else {
+        list->val_teardown(node->data);
+    }
+    ...
+```

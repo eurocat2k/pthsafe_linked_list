@@ -47,7 +47,7 @@ struct _llist {
 // NAMSPACED STRUCT WITH LINKEDLIST HANDLER METHODS
 typedef struct _nsllist nsLList_t;
 struct _nsllist {
-    List_t* (*create)(gen_func_t val_teardown);                     // list create
+    List_t* (*create)(gen_func_t teardown);                     // list create
     void (*destroy)(List_t*);
     int (*insert_node_index)(List_t*, void *, size_t);
     int (*insert_node_first)(List_t*, void *);

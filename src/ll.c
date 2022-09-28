@@ -6,11 +6,11 @@
  * @param  gen_func_t val_teardown: generic function to destroy list elements if their have no self destructor functions emmbedded into the list item
  * @retval 
  */
-List_t* create(gen_func_t val_teardown) {
+List_t* create(gen_func_t teardown) {
     List_t* list = (List_t*)calloc(1, sizeof(List_t));
     list->head = NULL;
     list->size = 0;
-    list->val_teardown = val_teardown;
+    list->teardown = teardown;
     // pthread_rwlock_init(&list->mtx, NULL);
 #ifdef HAVE_LIBPTHREAD
     list->mtx = PTHREAD_RWLOCK_INITIALIZER;
@@ -33,7 +33,11 @@ void destroy(List_t *list) {
 #ifdef HAVE_LIBPTHREAD
         RWLOCK(l_write, node->mtx);
 #endif
-        list->val_teardown(node->data);
+        if (node->destroy) {
+            node->destroy(node->data);
+        } else {
+            list->val_teardown(node->data);
+        }
 #ifdef HAVE_LIBPTHREAD
         RWUNLOCK(node->mtx);
 #endif
@@ -186,7 +190,11 @@ int remove_node_index(List_t *list, size_t n) {
 #ifdef HAVE_LIBPTHREAD
     RWUNLOCK(list->mtx);
 #endif
-    list->val_teardown(tmp->data);
+    if (tmp->destroy) {
+        tmp->destroy(tmp->data);
+    } else {
+        list->val_teardown(tmp->data);
+    }
     SafeFree(tmp);
     return list->size;
 }
@@ -232,7 +240,11 @@ int remove_node_search(List_t *list, condition_func_t cond) {
         RWUNLOCK(last->mtx);
 #endif
     }
-    list->val_teardown(node->data);
+    if (node->destroy) {
+        node->destroy(node->data);
+    } else {
+        list->val_teardown(node->data);
+    }
     SafeFree(node);
 #ifdef HAVE_LIBPTHREAD
     RWLOCK(l_write, list->mtx);
