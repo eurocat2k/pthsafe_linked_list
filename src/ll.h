@@ -18,12 +18,12 @@
 #ifndef RWUNLOCK
 #define RWUNLOCK(lk) pthread_rwlock_unlock(&(lk));
 #endif // !RWUNLOCK
+#endif
 // LOCK TYPES
 typedef enum locktype {
     l_read,
     l_write
 } locktype_t;
-#endif
 // GENERAL DESTROYER FUNCTION
 typedef void (*gen_func_t)(void *);
 typedef bool (*condition_func_t)(void *);
