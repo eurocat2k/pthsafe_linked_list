@@ -6,10 +6,8 @@
 #ifdef HAVE_LIBPTHREAD
 #include <pthread.h>
 #endif
-#include <stdbool.h>
-
-#include "sf.h"
-
+#include <stdbool.h>    // for remove_node_search
+#include "sf.h"         // for SafeFree
 #ifdef HAVE_LIBPTHREAD
 // for locking and unlocking rwlocks along with `locktype_t`
 #ifndef RWLOCK
@@ -17,25 +15,19 @@
                            ? pthread_rwlock_rdlock(&(lk)) \
                            : pthread_rwlock_wrlock(&(lk))
 #endif // !RWLOCK
-
 #ifndef RWUNLOCK
 #define RWUNLOCK(lk) pthread_rwlock_unlock(&(lk));
 #endif // !RWUNLOCK
-// 
-#endif
-
-/* type definitions */
+// LOCK TYPES
 typedef enum locktype {
     l_read,
     l_write
 } locktype_t;
-
-
+#endif
 // GENERAL DESTROYER FUNCTION
 typedef void (*gen_func_t)(void *);
 typedef bool (*condition_func_t)(void *);
-
-// LLIST FOR CLIENT LIST
+// NODE TYPE
 typedef struct _node Node_t;
 struct _node {
     struct _node *next;
@@ -43,7 +35,7 @@ struct _node {
     pthread_rwlock_t mtx;       // rw mutex
     gen_func_t destroy;
 };
-
+// LINKED LIST TYPE
 typedef struct _llist List_t;
 struct _llist {
     size_t size;                // size of the list
@@ -52,10 +44,8 @@ struct _llist {
     gen_func_t val_teardown;    // a function that is called every time a value is deleted with a pointer to that value
     gen_func_t val_printer;     // a function that can print the values in a linked list
 };
-
-
+// NAMSPACED STRUCT WITH LINKEDLIST HANDLER METHODS
 typedef struct _nsllist nsLList_t;
-
 struct _nsllist {
     List_t* (*create)(gen_func_t val_teardown);                     // list create
     void (*destroy)(List_t*);
@@ -71,7 +61,7 @@ struct _nsllist {
     void (*dump)(struct _llist list);
     void (*no_node_teardown)(void *n);
 };
-
+// MAKE IT AVAILABLE ELSEWHERE
 extern struct _nsllist nsIODELList;
 
 #endif /* F732C60A_3DB7_4F51_BF40_12E25A0C6BA7 */

@@ -56,6 +56,8 @@ The contents of the package directory will look like this (*see below*):
 
 From now it's quite simpe, you just go into ***src*** subdirectory, then call **make**.
 
+## Test
+
 If you have got **valgrind** tool, then you can check for the memory leaks, and inconsistencies.
 
 ```bash
@@ -109,3 +111,29 @@ For me - on my machine - the test gives the following result:
     ==29872== 
     ==29872== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
+
+## Hints
+
+In general the examples of the linked lists used to deal with scalar data - as node value. It's ok for simplicity, and make easy to code and test without taking care of memory issues - other than default destroy action performed by ***free(3)*** system call. However it's likly not the case in "*real world*" usage of the linked lists. The nodes shall consist of embedded - dynamically allocated sub memory regions with required data encapsulated - data structures as well, which in turn is a possibility to get something wrong with memory usage as a negative impact - memory leaks, memory exhaustions etc.
+
+All the docs and tutorials mention that you - the programmer - need to take care of the dynamically generated objects during the code runs. So, if you allocate memory for something, then it's kindly advised to be freed when that memory area is not used anymore. (***see more in free(3) manuals***)
+
+If you plan to store some kind of objects in the linked list - which were dynamically created before storing them in the list -, it's recommended to attach a custom function - node destroy function - to handle node elimination when user would like to remove a node from the list, or when user decides to remove the entire list itself. Practically the function frees all memory allocated at node creation time. *See below the code snippet from **ll.h***
+
+```C
+    typedef struct _llist List_t;
+    struct _llist {
+        size_t size;                // size of the list
+        Node_t *head;               // pointer to the first element of the list
+        pthread_rwlock_t mtx;       // mutex for thread safety
+        gen_func_t teardown;        // a function that is called every time a 
+                                    // value is deleted with a pointer to that value
+        gen_func_t dumper;          // a function that can print the values in a linked list
+    };
+```
+
+The ***gen_func_t** teardown* function deals with nodes as such - *common type of node data will be destroyed* - ***freed*** - by this function. 
+
+But what if the list is intended to be dealing with various types of nodes - either scalars, or other exotic structures even another linked lists?
+
+I added extra **destroy**/***teardown*** function for the node type - the list element type in the linked list -, to be able to handle node data specific cleanup processes.
