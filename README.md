@@ -1,5 +1,5 @@
 # pthsafe_linked_list
-thread safe linked list with test code
+thread safe linked list with test code - inspired by [r-medina's ll](https://github.com/r-medina/ll) package.
 
 ## Install
 
@@ -60,4 +60,52 @@ If you have got **valgrind** tool, then you can check for the memory leaks, and 
 
 ```bash
 (cd src && make) && valgrind -s --tool=drd --trace-rwlock=yes ./src/tsllist_demo
+```
+
+For me - on my machine - the test gives the following result:
+
+```bash
+    ==29872== drd, a thread error detector
+    ==29872== Copyright (C) 2006-2020, and GNU GPL'd, by Bart Van Assche.
+    ==29872== Using Valgrind-3.19.0 and LibVEX; rerun with -h for copyright info
+    ==29872== Command: ./src/tsllist_demo
+    ==29872== 
+    PASS Test 1!
+    PASS Test 2!
+    PASS Test 3!
+    PASS Test 4!
+    PASS Test 5!
+    PASS Test 6!
+    PASS Test 7!
+    PASS Test 8!
+    PASS Test 9!
+    PASS Test 10!
+    PASS Test 11!
+    PASS Test 12!
+    PASS Test 13!
+    (LIST:
+    0 1 2 3 4 5 6), length: 7
+    (LIST:
+    1 2 3 4 5 6), length: 6
+    (LIST:
+    1 3 4 5 6), length: 5
+    (LIST:
+    1 3 5 6), length: 4
+    (LIST:
+    1 3 5 6), length: 4
+    (LIST:
+    1 5 6), length: 3
+    (LIST:
+    1 5 6), length: 3
+    (LIST:
+    3 1 5 6), length: 4
+    (LIST:
+    3 1 5 6 3), length: 5
+    (LIST:
+    1 5 6 3), length: 4
+    (LIST:
+    1 5 6), length: 3
+    PASSED all 14 tests!
+    ==29872== 
+    ==29872== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 ```
