@@ -156,7 +156,7 @@ So, next time if the linked list wrapper attempt to store different type of data
     if (node->destroy) {
         node->destroy(node->data);
     } else {
-        list->val_teardown(node->data);
+        list->teardown(node->data);
     }
     ...
 ```
