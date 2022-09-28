@@ -134,7 +134,7 @@ If you plan to store some kind of objects in the linked list - which were dynami
 
 The ***gen_func_t** teardown* function deals with nodes as such - *common type of node data will be destroyed* - ***freed*** - by this function. 
 
-But what if the list is intended to be dealing with various types of nodes - either scalars, or other exotic structures even another linked lists?
+But what if the list is intended to be dealing with various types of nodes - other than scalars, some kind of exotic structures even another linked lists?
 
 I added extra **destroy**/***teardown*** function for the node type - the list element type in the linked list -, to be able to handle node data specific cleanup processes. *see below*:
 
