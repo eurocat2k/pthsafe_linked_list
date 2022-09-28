@@ -114,7 +114,7 @@ For me - on my machine - the test gives the following result:
 
 ## Hints
 
-In general the examples of the linked lists used to deal with scalar data - as node value. It's ok for simplicity, and make easy to code and test without taking care of memory issues - other than default destroy action performed by ***free(3)*** system call. However it's likly not the case in "*real world*" usage of the linked lists. The nodes shall consist of embedded - dynamically allocated sub memory regions with required data encapsulated - data structures as well, which in turn is a possibility to get something wrong with memory usage as a negative impact - memory leaks, memory exhaustions etc.
+In general the examples of the linked lists used to deal with scalar data - as node value. It's ok for simplicity, and make easy to code and test without taking care of memory issues - other than default destroy action performed by ***free(3)*** system call. However it's likely not the case in "*real world*" usage of the linked lists. The nodes shall consist of embedded - dynamically allocated sub memory regions with required data encapsulated - data structures as well, which in turn is a possibility to get something wrong with memory usage as a negative impact - memory leaks, memory exhaustions etc.
 
 All the docs and tutorials mention that you - the programmer - need to take care of the dynamically generated objects during the code runs. So, if you allocate memory for something, then it's kindly advised to be freed when that memory area is not used anymore. (***see more in free(3) manuals***)
 
